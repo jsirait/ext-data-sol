@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -14,13 +15,10 @@ const App = () => {
   const [onlineStatus, setOnlineStatus] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Additional Logic to allow editing of todo
-  const [todoToUpdate, setTodoToUpdate] = useState({});
+  // const [todoToUpdate, setTodoToUpdate] = useState({});
 
   useEffect(() => {
-    setTimeout(() => {
-      getTodos();
-    }, 5000);
+    getTodos();
   }, []);
 
   const getTodos = async () => {
@@ -38,7 +36,6 @@ const App = () => {
     }
   };
 
-  // Modified to allow editing of a todo
   const submitTodo = todo => {
     let updatedTodos;
     if (typeof todos !== "string") {
@@ -60,7 +57,7 @@ const App = () => {
     }
 
     setTodos(updatedTodos);
-    setTodoToUpdate({});
+    // setTodoToUpdate({});
   };
 
   const postTodo = async todo => {
@@ -83,28 +80,39 @@ const App = () => {
     }
   };
 
-  // Additional Logic to allow editing of todo
-  const selectTodo = todo => {
-    setTodoToUpdate(todo);
-  };
+  // const selectTodo = todo => {
+  //   setTodoToUpdate(todo);
+  // };
 
   return (
-    <div className="container">
-      <Header />
+    <Router>
       <div className="container">
-        {!onlineStatus && !loading ? (
-          <h3>The data server may be offline, changes will not be saved</h3>
-        ) : null}
-        {/* Components modified to allow editing of Todos */}
-        <AllTodos allTodos={todos} loading={loading} selectTodo={selectTodo} />
-        <AddTodo
-          submitTodo={submitTodo}
-          todos={todos}
-          todoToUpdate={todoToUpdate}
-        />
+        <Header />
+        <div className="container">
+          {!onlineStatus && !loading ? (
+            <h3>The data server may be offline, changes will not be saved</h3>
+          ) : null}
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => <AllTodos allTodos={todos} loading={loading} />}
+            />
+            <Route
+              path="/add"
+              render={() => <AddTodo submitTodo={submitTodo} />}
+            />
+            <Route
+              path="/edit/:_id"
+              render={props => (
+                <AddTodo {...props} submitTodo={submitTodo} todos={todos} />
+              )}
+            />
+          </Switch>
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </Router>
   );
 };
 

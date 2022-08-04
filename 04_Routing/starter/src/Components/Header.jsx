@@ -1,4 +1,5 @@
 import React from "react";
+import { Link, NavLink } from 'react-router-dom';
 
 import logo from "./images/qa.jpeg";
 
@@ -14,20 +15,20 @@ const Header = () => {
         >
           <img src={logo} alt="QA Ltd" width="30" />
         </a>
-        <a className="navbar-brand" href="/">
+        <Link className="navbar-brand" to="/">
           QA Todo App
-        </a>
+        </Link>
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav mr-auto">
             <li className="navbar-item">
-              <a href="/" className="nav-link">
+              <NavLink to="/" className="nav-link">
                 Todos
-              </a>
+              </NavLink>
             </li>
             <li className="navbar-item">
-              <a href="/add" className="nav-link">
+              <NavLink to="/add" className="nav-link">
                 Add Todo
-              </a>
+              </NavLink>
             </li>
           </ul>
         </div>

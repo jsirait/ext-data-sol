@@ -38,6 +38,28 @@ const App = () => {
     }
   };
 
+  const postTodo = async todo => {
+    try {
+      await axios.post(TODOSURL, todo);
+      setOnlineStatus(true);
+      getTodos();
+      }
+    catch (e) {
+      setOnlineStatus(false);
+    }
+  };
+
+  const updateTodo = async todo => {
+    try {
+        await axios.put(`${TODOSURL}/${todo._id}`, todo);
+        setOnlineStatus(true);
+        getTodos();
+    }
+    catch (e) {
+      setOnlineStatus(false);
+    }
+  };
+
   // Modified to allow editing of a todo
   const submitTodo = todo => {
     let updatedTodos;
@@ -53,8 +75,10 @@ const App = () => {
       Array.isArray(updatedTodos)
         ? updatedTodos.push(todo)
         : (updatedTodos = [todo]);
+      postTodo(todo);
     } else {
       updatedTodos[updateIndex] = todo;
+      updateTodo(todo);
     }
 
     setTodos(updatedTodos);
